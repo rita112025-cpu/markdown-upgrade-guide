@@ -1,0 +1,11 @@
+# 測試工具（只用於開發，網站本身不需要）
+node_modules/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# 暫存與系統檔
+*.log
+.DS_Store
+Thumbs.db

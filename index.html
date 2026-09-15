@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MD 文件排版入門｜3 步驟整理你的 Markdown</title>
+  <meta name="description" content="給初學者的 Markdown 排版教學：3 個步驟，把普通 Markdown 整理成容易閱讀、容易維護的文件。含一鍵複製、下載 .md 範本、檢查清單，支援深色與淺色模式。" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235E6AD2'/%3E%3Cpath d='M7 21V11l4.5 5 4.5-5v10M22 11v9m-3.5-3.5L22 20l3.5-3.5' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <script>
+    // 主題初始化：放在 CSS 之前執行，第一次繪製就是正確的深淺色，不會先白一下。
+    // 順序：使用者上次的選擇 → 系統設定。key 要和 app.js 的 THEME_KEY 一致。
+    (function () {
+      var saved = null;
+      try { saved = window.localStorage.getItem('md-guide-theme'); } catch (e) {}
+      var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved === 'light' || saved === 'dark' ? saved : (systemDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要內容</a>
+  <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="#start">
+        <svg class="brand-mark" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false">
+          <rect class="brand-mark-bg" width="32" height="32" rx="8" />
+          <path class="brand-mark-fg" d="M7 21V11l4.5 5 4.5-5v10M22 11v9m-3.5-3.5L22 20l3.5-3.5" />
+        </svg>
+        <span class="brand-name">MD 文件排版入門</span>
+      </a>
+
+      <button id="theme-toggle" class="theme-toggle" type="button">
+        <span class="theme-option theme-option-to-dark">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+          </svg>
+          <span><span class="sr-only">切換成</span>深色模式</span>
+        </span>
+        <span class="theme-option theme-option-to-light">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+          <span><span class="sr-only">切換成</span>淺色模式</span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- 桌機：左側目錄；手機與平板：頂部可橫向滑動的章節列 -->
+    <aside class="sidebar">
+      <nav class="section-nav" aria-label="章節導覽">
+        <p class="nav-title">目錄</p>
+        <ol class="nav-list" role="list">
+          <li><a class="nav-link" href="#start" data-nav="start" aria-current="true"><span class="nav-text">快速開始</span></a></li>
+          <li><a class="nav-link" href="#step1" data-nav="step1"><span class="nav-step">Step 1</span> <span class="nav-text">開頭架構</span></a></li>
+          <li><a class="nav-link" href="#step2" data-nav="step2"><span class="nav-step">Step 2</span> <span class="nav-text">內容排版</span></a></li>
+          <li><a class="nav-link" href="#step3" data-nav="step3"><span class="nav-step">Step 3</span> <span class="nav-text">收尾優化</span></a></li>
+          <li><a class="nav-link" href="#full" data-nav="full"><span class="nav-text">完整範本</span></a></li>
+          <li><a class="nav-link" href="#checklist" data-nav="checklist"><span class="nav-text">檢查清單</span> <span class="nav-count" data-progress-count>0/5</span></a></li>
+        </ol>
+      </nav>
+
+      <div class="sidebar-card" aria-hidden="true">
+        <p class="sidebar-card-title">檢查清單進度</p>
+        <div class="progress"><div class="progress-fill" data-progress-bar></div></div>
+        <p class="sidebar-card-text">已完成 <span data-progress-count>0/5</span></p>
+      </div>
+    </aside>
+
+    <main id="main" class="content" tabindex="-1">
+      <div id="app-fallback" class="notice" role="alert" hidden>
+        <p class="notice-title">範例內容沒有載入</p>
+        <p>如果你是直接雙擊 <code>index.html</code> 開啟，瀏覽器會擋下範本檔案。請在這個資料夾執行 <code>python -m http.server 8000</code>（Windows 可改用 <code>py -m http.server 8000</code>），再打開 <code>http://localhost:8000/</code>。</p>
+      </div>
+
+      <!-- 快速開始 -->
+      <section id="start" class="section hero" aria-labelledby="start-title">
+        <p class="eyebrow">
+          <span class="pill pill-brand">初學者教學</span>
+          <span class="pill">約 15 分鐘</span>
+          <span class="pill">不用寫程式</span>
+        </p>
+        <h1 id="start-title">MD 文件排版入門</h1>
+        <p class="lede">3 個步驟，把普通 Markdown 整理成容易閱讀、容易維護的文件。</p>
+
+        <dl class="facts">
+          <div class="fact">
+            <dt>適合誰</dt>
+            <dd>剛開始使用 GitHub / Markdown 的使用者</dd>
+          </div>
+          <div class="fact">
+            <dt>不需要</dt>
+            <dd>HTML / CSS / JavaScript 經驗</dd>
+          </div>
+          <div class="fact">
+            <dt>你會學到什麼</dt>
+            <dd>寫好文件開頭、把內容排整齊、留下更新紀錄</dd>
+          </div>
+          <div class="fact">
+            <dt>約需多久</dt>
+            <dd>約 15 分鐘，每一步 3～7 分鐘</dd>
+          </div>
+        </dl>
+
+        <div class="callout callout-note">
+          <p class="callout-title"><span aria-hidden="true">💡</span> Markdown 是什麼？</p>
+          <p>一種用符號排版的純文字格式。例如 <code>#</code> 代表標題、<code>-</code> 代表清單。GitHub 上常見的 <code>README.md</code> 就是 Markdown 檔。</p>
+        </div>
+
+        <h2 class="subhead">怎麼使用這一頁</h2>
+        <ol class="howto">
+          <li>打開你要整理的 <code>.md</code> 檔，例如 GitHub 專案裡的 <code>README.md</code>。</li>
+          <li>照 Step 1 → Step 3，複製範例貼進去，再把文字換成你自己的內容。</li>
+          <li>最後用「檢查清單」確認 5 個重點。</li>
+        </ol>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="#step1">從 Step 1 開始</a>
+          <button class="btn" type="button" data-download="md">下載完整範本 .md</button>
+        </div>
+      </section>
+
+      <!-- Step 1 -->
+      <section id="step1" class="section step" aria-labelledby="step1-title">
+        <p class="step-meta"><span class="step-badge">Step 1</span><span class="step-time">約 5 分鐘</span></p>
+        <h2 id="step1-title">開頭架構：讓人一眼看懂文件</h2>
+
+        <div class="callout callout-goal">
+          <p class="callout-title"><span aria-hidden="true">🎯</span> 這一步要做什麼</p>
+          <p>在文件最上方放好<strong>標題、一句話用途、基本資訊、目錄</strong>。</p>
+        </div>
+
+        <p>讀者打開文件，最先想知道「這是什麼、誰負責、還能不能用」。把答案放在最上面，就不用往下翻找。</p>
+        <ul class="syntax-list">
+          <li><code>#</code> 開頭是標題，<code>#</code> 越多層級越小；一份文件只用一個 <code>#</code> 大標題</li>
+          <li><code>&gt;</code> 開頭是引言，適合放一句話用途</li>
+          <li><code>|</code> 用來畫表格，第二行的 <code>| --- |</code> 是分隔線，一定要寫</li>
+          <li><code>[快速開始](#快速開始)</code> 是目錄連結：<code>#</code> 後面接標題文字（英文轉小寫、空格改成 <code>-</code>）</li>
+        </ul>
+
+        <figure class="code-card">
+          <figcaption class="code-card-head">
+            <span class="code-card-label">範例：貼在文件最上方</span>
+            <span class="code-card-lang">Markdown</span>
+          </figcaption>
+          <pre class="code-block" tabindex="0"><code id="code-step1"></code></pre>
+        </figure>
+        <div class="code-actions">
+          <button class="btn btn-primary" type="button" data-copy="step1"><span class="btn-label">複製 Step 1 範例</span></button>
+          <p class="hint">貼上後，把「專案名稱」「@你的帳號」這些文字換成你的內容。</p>
+        </div>
+
+        <div class="callout callout-result">
+          <p class="callout-title"><span aria-hidden="true">✅</span> 完成後會得到什麼</p>
+          <ul>
+            <li>打開文件就看到用途、維護者、更新日期</li>
+            <li>有目錄，點一下就跳到想看的段落</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Step 2 -->
+      <section id="step2" class="section step" aria-labelledby="step2-title">
+        <p class="step-meta"><span class="step-badge">Step 2</span><span class="step-time">約 7 分鐘</span></p>
+        <h2 id="step2-title">內容排版：層次分明好閱讀</h2>
+
+        <div class="callout callout-goal">
+          <p class="callout-title"><span aria-hidden="true">🎯</span> 這一步要做什麼</p>
+          <p>把一大段文字，改寫成<strong>編號步驟、表格、提示框</strong>，讓重點跳出來。</p>
+        </div>
+
+        <p>同一種資訊用同一種寫法：有先後順序的用編號、要比較的用表格、要提醒的用提示框。</p>
+        <ul class="syntax-list">
+          <li><code>1.</code> <code>2.</code> <code>3.</code> 編號清單：有先後順序的步驟</li>
+          <li><code>`反白`</code>：按鈕名稱、檔名、指令</li>
+          <li><code>**粗體**</code>：真正重要的字，整份文件不超過 5 處</li>
+          <li><code>&gt; [!TIP]</code> 提示框：GitHub 會顯示成彩色框；不支援的平台會顯示成一般引言（看得到 [!TIP] 字樣），內容不會消失</li>
+          <li><code>###</code> 小標題：一個問題一個小標題，方便跳著看</li>
+        </ul>
+
+        <figure class="code-card">
+          <figcaption class="code-card-head">
+            <span class="code-card-label">範例：貼在開頭之後，取代原本的內文</span>
+            <span class="code-card-lang">Markdown</span>
+          </figcaption>
+          <pre class="code-block" tabindex="0"><code id="code-step2"></code></pre>
+        </figure>
+        <div class="code-actions">
+          <button class="btn btn-primary" type="button" data-copy="step2"><span class="btn-label">複製 Step 2 範例</span></button>
+          <p class="hint">表格和提示框的前後都要空一行，才會正確顯示。</p>
+        </div>
+
+        <div class="callout callout-result">
+          <p class="callout-title"><span aria-hidden="true">✅</span> 完成後會得到什麼</p>
+          <ul>
+            <li>掃一眼就分得出步驟、說明、注意事項</li>
+            <li>重要提醒不會被埋在長段落裡</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section id="step3" class="section step" aria-labelledby="step3-title">
+        <p class="step-meta"><span class="step-badge">Step 3</span><span class="step-time">約 3 分鐘</span></p>
+        <h2 id="step3-title">收尾優化：留下紀錄，方便接手</h2>
+
+        <div class="callout callout-goal">
+          <p class="callout-title"><span aria-hidden="true">🎯</span> 這一步要做什麼</p>
+          <p>在文件最下方加上<strong>更新紀錄、參考資源、回到頂部連結</strong>。</p>
+        </div>
+
+        <p>文件會一直修改。寫下「什麼時候改了什麼、參考了哪裡」，下一個接手的人（包括未來的你）才看得懂。</p>
+        <ul class="syntax-list">
+          <li><code>---</code> 分隔線：把正文和結尾隔開。上面要空一行，不然上一行會變成標題</li>
+          <li>更新紀錄用表格，最新的一筆放最上面</li>
+          <li><code>[文字](網址)</code>：連到外部網站</li>
+          <li><code>[回到頂部 ↑](#專案名稱)</code>：大標題改名時，這個連結也要跟著改</li>
+        </ul>
+
+        <figure class="code-card">
+          <figcaption class="code-card-head">
+            <span class="code-card-label">範例：貼在文件最下方</span>
+            <span class="code-card-lang">Markdown</span>
+          </figcaption>
+          <pre class="code-block" tabindex="0"><code id="code-step3"></code></pre>
+        </figure>
+        <div class="code-actions">
+          <button class="btn btn-primary" type="button" data-copy="step3"><span class="btn-label">複製 Step 3 範例</span></button>
+          <p class="hint">之後每次修改文件，就在更新紀錄最上面加一行。</p>
+        </div>
+
+        <div class="callout callout-result">
+          <p class="callout-title"><span aria-hidden="true">✅</span> 完成後會得到什麼</p>
+          <ul>
+            <li>看得出文件多久沒更新、改過什麼</li>
+            <li>別人知道去哪裡查資料、怎麼回報問題</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 完整範本 -->
+      <section id="full" class="section" aria-labelledby="full-title">
+        <p class="step-meta"><span class="step-badge step-badge-muted">一次套用</span></p>
+        <h2 id="full-title">完整範本：三個步驟合在一起</h2>
+        <p>Step 1～3 的範例依序接起來，就是這份完整範本。想一次套用，複製或下載之後，把文字換成你自己的內容即可。</p>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="button" data-copy="full"><span class="btn-label">複製完整範本</span></button>
+          <button class="btn" type="button" data-download="md">下載 .md 檔</button>
+          <button class="btn" type="button" data-download="html">下載 .html 檔</button>
+        </div>
+        <p class="hint">下載的檔名：<code>md-upgrade-full-template.md</code>、<code>md-upgrade-guide.html</code></p>
+
+        <details class="code-details">
+          <summary>展開／收合完整範本（共 <span id="full-line-count">—</span> 行）</summary>
+          <figure class="code-card">
+            <figcaption class="code-card-head">
+              <span class="code-card-label">md-upgrade-full-template.md</span>
+              <span class="code-card-lang">Markdown</span>
+            </figcaption>
+            <pre class="code-block" tabindex="0"><code id="code-full"></code></pre>
+          </figure>
+        </details>
+      </section>
+
+      <!-- 檢查清單 -->
+      <section id="checklist" class="section" aria-labelledby="checklist-title">
+        <p class="step-meta"><span class="step-badge step-badge-muted">最後確認</span><span class="step-time">約 1 分鐘</span></p>
+        <h2 id="checklist-title">檢查清單：5 個重點</h2>
+        <p>改完文件後逐項確認。勾選紀錄只存在你的瀏覽器裡，不會上傳。</p>
+
+        <div class="progress-row">
+          <p class="progress-text" id="checklist-progress-label">已完成 <strong data-progress-count>0/5</strong></p>
+          <div id="checklist-progress" class="progress" role="progressbar" aria-labelledby="checklist-progress-label" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+            <div class="progress-fill" data-progress-bar></div>
+          </div>
+        </div>
+
+        <ul class="check-list" role="list">
+          <li>
+            <label class="check-item">
+              <input class="check-input" type="checkbox" />
+              <span class="check-box" aria-hidden="true"></span>
+              <span class="check-text">開頭有「標題 + 一句話用途 + 更新日期」</span>
+            </label>
+          </li>
+          <li>
+            <label class="check-item">
+              <input class="check-input" type="checkbox" />
+              <span class="check-box" aria-hidden="true"></span>
+              <span class="check-text">有目錄，點連結會跳到正確的段落</span>
+            </label>
+          </li>
+          <li>
+            <label class="check-item">
+              <input class="check-input" type="checkbox" />
+              <span class="check-box" aria-hidden="true"></span>
+              <span class="check-text">用表格、提示框或 emoji 整理重點，不是一大段純文字</span>
+            </label>
+          </li>
+          <li>
+            <label class="check-item">
+              <input class="check-input" type="checkbox" />
+              <span class="check-box" aria-hidden="true"></span>
+              <span class="check-text">重要的字用 <code>`反白`</code> 或 <code>**粗體**</code> 標出來，粗體整份不超過 5 處</span>
+            </label>
+          </li>
+          <li>
+            <label class="check-item">
+              <input class="check-input" type="checkbox" />
+              <span class="check-box" aria-hidden="true"></span>
+              <span class="check-text">結尾有更新紀錄和參考連結，別人接手看得懂</span>
+            </label>
+          </li>
+        </ul>
+
+        <p id="celebrate" class="celebrate" hidden><span aria-hidden="true">🎉</span> 5/5 全部完成！這份文件已經可以發布了。</p>
+
+        <div class="checklist-actions">
+          <button id="checklist-reset" class="btn" type="button">清除勾選，重新檢查</button>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <h2 class="subhead">延伸閱讀</h2>
+        <ul class="ref-list">
+          <li>
+            <a href="https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax" target="_blank" rel="noopener noreferrer">GitHub 官方文件：基本寫作和格式語法<span class="sr-only">（另開分頁）</span></a>
+            <span class="ref-note">簡體中文頁面，標題、表格、連結、提示框都有完整說明</span>
+          </li>
+        </ul>
+        <p class="hint">設計文件參考（進階；外部網站內容請自行判斷）：
+          <a href="https://designmd.me" target="_blank" rel="noopener noreferrer">designmd.me<span class="sr-only">（另開分頁）</span></a>、<a href="https://typeui.sh" target="_blank" rel="noopener noreferrer">typeui.sh<span class="sr-only">（另開分頁）</span></a>、<a href="https://designmd.supply" target="_blank" rel="noopener noreferrer">designmd.supply<span class="sr-only">（另開分頁）</span></a>、<a href="https://getdesign.md" target="_blank" rel="noopener noreferrer">getdesign.md<span class="sr-only">（另開分頁）</span></a>
+        </p>
+        <p class="footer-meta">本站是純 HTML / CSS / JavaScript：不需要 build，不載入外部字型、CDN 或 API。範本內容在 <code>templates.js</code>，可自由修改（MIT 授權）。</p>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+  <script>
+    // app.js 沒有成功執行（例如用 file:// 直接開啟、templates.js 載入失敗）時，顯示提示。
+    window.addEventListener('load', function () {
+      if (document.documentElement.getAttribute('data-app-ready') !== 'true') {
+        var notice = document.getElementById('app-fallback');
+        if (notice) notice.hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

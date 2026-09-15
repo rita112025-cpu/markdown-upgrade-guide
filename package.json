@@ -1,0 +1,14 @@
+{
+  "name": "markdown-upgrade-guide",
+  "version": "1.0.0",
+  "private": true,
+  "description": "給初學者的 Markdown 排版教學網站。本檔只用於開發與測試；網站本身不需要 npm、不需要 build。",
+  "license": "MIT",
+  "scripts": {
+    "test": "playwright test",
+    "test:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
