@@ -14,7 +14,7 @@
   --bg-soft: #F6F6F7;        /* 滑過、次要背景 */
   --surface: #F6F6F7;        /* 卡片背景 */
   --text: #111111;           /* 主要文字 */
-  --text-muted: #666666;     /* 次要文字、提示 */
+  --text-muted: #555555;     /* 次要文字、提示（白底對比 7.5:1） */
   --border: rgba(0, 0, 0, 0.08);         /* 卡片框線 */
   --border-strong: rgba(0, 0, 0, 0.16);  /* 按鈕、程式碼框線 */
   --brand: #5E6AD2;          /* 品牌色：按鈕、進度條 */
@@ -35,7 +35,7 @@
   --bg-soft: #151515;
   --surface: #111111;
   --text: #EDEDEE;
-  --text-muted: #9A9A9A;
+  --text-muted: #C4C4C6;     /* 手機上 #9A9A9A 太暗，提高到黑底對比約 11.5:1 */
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
   --brand: #5E6AD2;
